@@ -1,42 +1,37 @@
 pipeline {
     agent any
 
-    environment {
-        VENV = 'venv'
+    stages {
+        stage('Checkout Code') {
+            steps {
+                // Clone your forked repo
+                git url: 'https://github.com/your-username/minfy-python-demo-av.git', branch: 'main'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Build the Docker image
+                    docker.build("minfy-python-app:latest")
+                }
+            }
+        }
+
+        // Optional: Add test or deploy stages later
+        stage('Test') {
+            steps {
+                echo 'Testing placeholder...'
+            }
+        }
     }
 
-    stages {
-        stage ("Install") {
-            steps {
-                sh '''
-                    python3 -m venv $VENV
-                    . $VENV/bin/activate
-                    pip install --upgrade pip
-                    pip install -r requirements.txt
-                '''
-            }
+    post {
+        success {
+            echo 'Pipeline succeeded!'
         }
-        stage ("Linting") {
-            steps {
-                script {
-                    echo "This is my Linting Step"
-                }
-            }
+        failure {
+            echo 'Pipeline failed!'
         }
-        stage ("Install Packages") {
-            steps {
-                script {
-                    echo "This is Install PAkcges Step"
-                }
-            }
-        }
-        stage ("Run Application") {
-            steps {
-                script {
-                    echo "This is my Run applcaition Step"
-                }
-            }
-        }
-
     }
 }
