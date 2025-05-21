@@ -13,7 +13,25 @@ pipeline {
             steps {
                 script {
                     // Build the Docker image
-                    docker.build("minfy-python-app:latest")
+                    docker build -t minfy-python-demo-av .
+                }
+            }
+        }
+
+        stage('Build Docker Tag') {
+            steps {
+                script {
+                    // Tag the Docker 
+                    docker tag minfy-python-demo-av avanishsah/minfy-python-demo-av:latest
+                }
+            }
+        }
+
+        stage('Push Docker') {
+            steps {
+                script {
+                    // Push the Docker
+                    docker push avanishsah/minfy-python-demo-av:latest                    
                 }
             }
         }
